@@ -1,0 +1,35 @@
+#-------PMOS with triangular mesh --------#
+GLOBAL T=300 DopingScale=1e15 resistivemetal=false
+#-----------------MESHING------------------#
+MESH Type = S_Tri3
+X.MESH WIDTH=0.12 N.SPACES=8
+X.MESH WIDTH=0.035 N.SPACES=6
+X.MESH WIDTH=0.09 N.SPACES=15
+X.MESH WIDTH=0.035 N.SPACES=6
+X.MESH WIDTH=0.12 N.SPACES=8
+Y.MESH Y.TOP=-0.006 DEPTH=0.002 N.SPACES=4
+Y.MESH DEPTH=0.004 N.SPACES=4
+Y.MESH DEPTH=0.015 N.SPACES=4
+Y.MESH DEPTH=0.010 N.SPACES=4
+Y.MESH DEPTH=0.005 N.SPACES=8
+Y.MESH DEPTH=0.37 N.SPACES=10
+#-----------------SPREAD------------------#
+#SPREAD Location=Left Width=0.125 Upper=0 Lower=2 Thickness=0.02 Encroach=1
+#SPREAD Location=Right Width=0.125 Upper=0 Lower=2 Thickness=0.02 Encroach=1
+#-----------------REGION------------------#
+REGION Label=N.SUBSTRATE Material=Si
+REGION Label=N.Oxide IY.MAX=4 Material=Ox
+REGION Label=N.Source X.MIN=0.0 X.MAX=0.155 IY.MAX=4 Material=Elec
+REGION Label=N.Drain X.MIN=0.245 X.MAX=0.4 IY.MAX=4 Material=Elec
+REGION Label=N.Gate X.MIN=0.245 X.MAX=0.4 Y.MIN=-0.006 Y.MAX=-0.004 Material=Elec
+FACE Label=N.SUB Location=BOTTOM
+#FACE Label=N.GATE X.MIN=0.155 X.MAX=0.245 Location=Top
+#-----------------DOPING------------------#
+DOPING Type=analytic
+PROFILE Type=Uniform Ion=Donor N.PEAK=5E15 X.MIN=0.0 X.MAX=0.4 Y.TOP=0 Y.BOTTOM=0.4
+PROFILE Type=analytic Ion=Donor N.PEAK=1E18 X.MIN=0.0 X.MAX=0.4 Y.TOP=0.00 Y.CHAR=0.02
+PROFILE Type=analytic Ion=Acceptor N.PEAK=2E18 Y.Junction=0.005 X.MIN=0.0 X.MAX=0.15 XY.RATIO=1
+PROFILE Type=analytic Ion= Acceptor N.PEAK=1E20 Y.Junction=0.02 X.MIN=0.0 X.MAX=0.120 XY.RATIO=0.5
+PROFILE Type=analytic Ion= Acceptor N.PEAK=2E18 Y.Junction=0.005 X.MIN=0.25 X.MAX=0.4 XY.RATIO=1
+PROFILE Type=analytic Ion= Acceptor N.PEAK=1E20 Y.Junction=0.02 X.MIN=0.280 X.MAX=0.4 XY.RATIO=0.5
+Export VtkFile="PMOS2D.vtu" CgnsFile="PMOS2D.cgns"

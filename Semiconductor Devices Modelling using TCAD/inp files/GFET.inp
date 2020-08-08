@@ -1,0 +1,22 @@
+# do global settings
+Global T=300 DopingScale=1.0000000000000000e+20 Z.Width=1
+ 
+# do import source
+Import TIFFile="PMOS.tif"
+ 
+# do boundary settings
+Boundary ID=sub Type=ohmiccontact
+ 
+# do region settings
+Model Region=sub ii=Local
+ 
+VSource Type=VDC ID=subConst VConst=0
+Method Type=Poisson damping=Potential ns=Basic
+Solve
+Method Type="DDML1" damping=Potential ns=Basic
+Solve Type=Equilibrium
+Method Type="DDML1" NS=Basic ls=MUMPS
+Attach Electrode=sub Vapp=subConst
+Hook Load=vtk
+Solve Type=DC Label="vg" VScan=Gate VStart=0 VStop=-10 VStep=-0.1 out.prefix="vg"
+Export VtkFile="result.vtu" CgnsFile="result.cgns"
